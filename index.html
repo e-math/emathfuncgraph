@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Functionplotter emathfuncgraph</title>
+        <meta charset="UTF-8">
+        <link type="text/css" rel="stylesheet" media="all" href="style.css" />
+        <link type="text/css" rel="stylesheet" media="all" href="mathquill/mathquill.css" />
+        <link type="text/css" rel="stylesheet" media="all" href="jsxgraph.css" />
+        <script type="text/javascript" src="jquery.min.js"></script>
+        <script type="text/javascript" src="mathquill/mathquill.js"></script>
+        <script type="text/javascript" src="mqpanel.js"></script>
+        <script type="text/javascript" src="jsxgraphcore.js"></script>
+        <script type="text/javascript" src="emathfuncgraph.js"></script>
+        <script type="text/javascript">
+            jQuery(function(){
+                jQuery('#mathquillpanel').mqpanel();
+                var data = {"theme":"default_theme","xscale":[-10,10],"yscale":[-10,10],"editable":true,"elements":[{"type":"circle","name":"c_1","x0":"0","y0":"0","r":"4","a":"0","b":"0","c":"-16","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_2","x0":"-4","y0":"5","r":"2.5","a":"8","b":"-10","c":"34.8","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_3","x0":"4","y0":"5","r":"2.5","a":"-8","b":"-10","c":"34.8","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_4","x0":"-1","y0":"0.5","r":"0.3","a":"2","b":"-1","c":"1.2","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_5","x0":"1","y0":"0.5","r":"0.3","a":"-2","b":"-1","c":"1.2","inputtype":"centerpoint","color":"black","readonly":false},{"type":"function","name":"f_1","latex":"\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{2}\\right)^2}-1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_2","latex":"-\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{2}\\right)^2}-1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_3","latex":"1.5\\sqrt{1-\\left(\\frac{3\\left(x-1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_4","latex":"-\\sqrt{1-\\left(\\frac{3\\left(x-1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_5","latex":"1.5\\cdot\\sqrt{1-\\left(\\frac{3\\left(x+1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_6","latex":"-\\sqrt{1-\\left(\\frac{3\\left(x+1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_7","latex":"\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{6}\\right)^2}-0.5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_8","latex":"-1.8\\cdot\\sqrt{1-\\left(\\frac{x}{3}\\right)^2}-0.5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_9","latex":"-\\sqrt{1-\\left(0.8\\cdot x\\right)^2}-2.2","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_10","latex":"3.7\\cdot\\sqrt{1-\\left(0.6\\left(x+1\\right)\\right)^2}-0.4","color":"black","max":"0","min":"","readonly":false},{"type":"function","name":"f_11","latex":"3.7\\cdot\\sqrt{1-\\left(0.6\\left(x-1\\right)\\right)^2}-0.4","color":"black","max":"","min":"0","readonly":false},{"type":"function","name":"f_12","latex":"0.6\\sqrt{1-\\left(1.6\\left(x+3.2\\right)\\right)^2}-0.8","color":"black","max":"-2.7","min":"-4","readonly":false},{"type":"function","name":"f_13","latex":"0.6\\sqrt{1-\\left(1.6\\left(x-3.2\\right)\\right)^2}-0.8","color":"black","max":"4","min":"2.7","readonly":false},{"type":"function","name":"f_14","latex":"\\left(\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{2}\\right)^2}\\right)\\cdot\\sin\\left(50x\\right)-1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_15","latex":"\\frac{5}{2}\\cdot\\left(\\sqrt{1-\\left(\\frac{2\\left(x-4\\right)}{5}\\right)^2}\\right)\\cdot\\sin\\left(50x\\right)+5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_16","latex":"\\frac{5}{2}\\cdot\\left(\\sqrt{1-\\left(\\frac{2\\left(x+4\\right)}{5}\\right)^2}\\right)\\cdot\\sin\\left(50x\\right)+5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_17","latex":"0.3\\cdot\\left(\\sqrt{1-\\left(10\\cdot\\frac{\\left(x+1\\right)}{3}\\right)^2}\\right)\\cdot\\sin\\left(40x\\right)+0.5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_18","latex":"0.3\\cdot\\left(\\sqrt{1-\\left(10\\cdot\\frac{\\left(x-1\\right)}{3}\\right)^2}\\right)\\cdot\\sin\\left(40x\\right)+0.5","color":"black","max":"","min":"","readonly":false}]};
+                var data2 = {"theme":"default_theme", decimalperiod: true,"xscale":[-10,10],"yscale":[-10,10],"editable":true,"authormode":true,"listvisible":false,"elements":[{"type":"point","name":"P_1","color":"red","readonly":false,"xcoord":"0","ycoord":"0"},{"type":"function","name":"f_1","color":"blue","readonly":true,"latex":"x","max":"","min":""},{"type":"point","name":"P_2","color":"red","readonly":true,"xcoord":"7.56","ycoord":"3.18"},{"type":"segment","name":"s_1","color":"green","readonly":true,"point1":"P_1","point2":"P_2","showxdiff":true,"showydiff":true,"showdxdyvalue":true}, {type:'circle', name: 'c', inputtype: 'centerpoint', x0: 2, y0: -4, r: 3, readonly: false}]};
+                //jQuery('.box1').emathfuncgraph({editable: false, decimalperiod: true, vertical: false, elements: [{type: 'function', name: 'f', latex: 'x+5', min: '-7', max: '3', readonly: false}, {type: 'segment', point1: 'Q', point2: 'P', showxdiff: true, showydiff: true, showdxdyvalue: true, readonly: false},{type: 'function', name: 'g', latex: 'x^3-2', readonly: false}, {type: 'point', name: 'P', xcoord: '3', ycoord: '7'}, {type: 'point', name: 'Q', xcoord: '-1', ycoord: '2', readonly: true}, {type:'circle', name: 'c', inputtype: 'centerpoint', x0: 2, y0: -4, r: 3, readonly: false},{type:'circle', name: 'c2', inputtype: 'normal', a: 2, b: 3, c: -4, readonly: false},{type:'line', name:'l_1', inputtype: 'explicit', a: 1, b: 2, c: 3, va: 5, k: 2, eb: 3, readonly: false}]});
+                //jQuery('.box1').emathfuncgraph({editable: true, authormode: true, decimalperiod: true, vertical: false, elements: []});
+                //jQuery('.box1').emathfuncgraph(data);
+                jQuery('.box1').emathfuncgraph(data2);
+            
+                jQuery('#isauthormode').attr('checked',(jQuery('.emathfuncgraph').eq(0).hasClass('emfuncgraph_authormode') ? 'checked' : ''));
+                jQuery('#iseditmode').attr('checked',(jQuery('.emathfuncgraph').eq(0).hasClass('emfuncgraph_editmode') ? 'checked' : ''));
+                jQuery('#isauthormode').change(function(){
+                    var $fg = jQuery('.emathfuncgraph').eq(0);
+                    var fgdata = $fg.emathfuncgraph('get');
+                    fgdata.authormode = jQuery('#isauthormode').is(':checked');
+                    jQuery('#databox').html(JSON.stringify(fgdata, null, 4));
+                    $fg.emathfuncgraph(fgdata);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <header>
+            <div id="head-content">
+                <img id="logo" src="images/emath-logo.png" alt="E-Math" />
+                <h1>Emathfuncgraph</h1>
+                <h2>Draw graphs from math</h2>
+            </div>
+        </header>
+        <a href="https://github.com/e-math/emathfuncgraph"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png" alt="Fork me on GitHub"></a>
+        <div id="mathquillpanel"></div>
+        <article class="content">
+            <h2>Example</h2>
+            <p>Example of usage of <code>emathfuncgraph.js</code>.</p>
+            <div class="codewrapper">
+<div class="codeexample">
+&lt;div class="box"&gt;
+&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
+    jQuery('.box').emathfuncgraph();
+&lt;/script&gt;
+</div>
+            </div>
+            <div class="box1"></div>
+            <p>
+                <input id="isauthormode" type="checkbox" /><label for="isauthormode">Authormode</label>
+            </p>
+            <pre id="databox"></pre>
+            <!--<div class="box"></div>-->
+        </article>
+        <footer>
+            <div id="disclaimerbox">
+                <div id="leftlogo">
+                    <img src="images/CB_logo-200.png" alt="" />
+                </div>
+                <div id="rightlogo">
+                    <img src="images/EU_with_references-300.png" alt="" />
+                </div>
+                <div id="disclaimer">
+                    The contents of the website reflect the authors' views. The Managing Authority of the Central Baltic INTERREG IVA Programme cannot be held liable for the information published by the project partners. 
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

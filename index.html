@@ -13,22 +13,197 @@
         <script type="text/javascript" src="emathfuncgraph.js"></script>
         <script type="text/javascript">
             jQuery(function(){
+                delete localStorage.mqpanelsettings;
                 jQuery('#mathquillpanel').mqpanel();
-                var data = {"theme":"default_theme","xscale":[-10,10],"yscale":[-10,10],"editable":true,"elements":[{"type":"circle","name":"c_1","x0":"0","y0":"0","r":"4","a":"0","b":"0","c":"-16","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_2","x0":"-4","y0":"5","r":"2.5","a":"8","b":"-10","c":"34.8","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_3","x0":"4","y0":"5","r":"2.5","a":"-8","b":"-10","c":"34.8","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_4","x0":"-1","y0":"0.5","r":"0.3","a":"2","b":"-1","c":"1.2","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_5","x0":"1","y0":"0.5","r":"0.3","a":"-2","b":"-1","c":"1.2","inputtype":"centerpoint","color":"black","readonly":false},{"type":"function","name":"f_1","latex":"\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{2}\\right)^2}-1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_2","latex":"-\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{2}\\right)^2}-1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_3","latex":"1.5\\sqrt{1-\\left(\\frac{3\\left(x-1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_4","latex":"-\\sqrt{1-\\left(\\frac{3\\left(x-1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_5","latex":"1.5\\cdot\\sqrt{1-\\left(\\frac{3\\left(x+1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_6","latex":"-\\sqrt{1-\\left(\\frac{3\\left(x+1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_7","latex":"\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{6}\\right)^2}-0.5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_8","latex":"-1.8\\cdot\\sqrt{1-\\left(\\frac{x}{3}\\right)^2}-0.5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_9","latex":"-\\sqrt{1-\\left(0.8\\cdot x\\right)^2}-2.2","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_10","latex":"3.7\\cdot\\sqrt{1-\\left(0.6\\left(x+1\\right)\\right)^2}-0.4","color":"black","max":"0","min":"","readonly":false},{"type":"function","name":"f_11","latex":"3.7\\cdot\\sqrt{1-\\left(0.6\\left(x-1\\right)\\right)^2}-0.4","color":"black","max":"","min":"0","readonly":false},{"type":"function","name":"f_12","latex":"0.6\\sqrt{1-\\left(1.6\\left(x+3.2\\right)\\right)^2}-0.8","color":"black","max":"-2.7","min":"-4","readonly":false},{"type":"function","name":"f_13","latex":"0.6\\sqrt{1-\\left(1.6\\left(x-3.2\\right)\\right)^2}-0.8","color":"black","max":"4","min":"2.7","readonly":false},{"type":"function","name":"f_14","latex":"\\left(\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{2}\\right)^2}\\right)\\cdot\\sin\\left(50x\\right)-1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_15","latex":"\\frac{5}{2}\\cdot\\left(\\sqrt{1-\\left(\\frac{2\\left(x-4\\right)}{5}\\right)^2}\\right)\\cdot\\sin\\left(50x\\right)+5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_16","latex":"\\frac{5}{2}\\cdot\\left(\\sqrt{1-\\left(\\frac{2\\left(x+4\\right)}{5}\\right)^2}\\right)\\cdot\\sin\\left(50x\\right)+5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_17","latex":"0.3\\cdot\\left(\\sqrt{1-\\left(10\\cdot\\frac{\\left(x+1\\right)}{3}\\right)^2}\\right)\\cdot\\sin\\left(40x\\right)+0.5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_18","latex":"0.3\\cdot\\left(\\sqrt{1-\\left(10\\cdot\\frac{\\left(x-1\\right)}{3}\\right)^2}\\right)\\cdot\\sin\\left(40x\\right)+0.5","color":"black","max":"","min":"","readonly":false}]};
-                var data2 = {"theme":"default_theme", decimalperiod: true,"xscale":[-10,10],"yscale":[-10,10],"editable":true,"authormode":true,"listvisible":false,"elements":[{"type":"point","name":"P_1","color":"red","readonly":false,"xcoord":"0","ycoord":"0"},{"type":"function","name":"f_1","color":"blue","readonly":true,"latex":"x","max":"","min":""},{"type":"point","name":"P_2","color":"red","readonly":true,"xcoord":"7.56","ycoord":"3.18"},{"type":"segment","name":"s_1","color":"green","readonly":true,"point1":"P_1","point2":"P_2","showxdiff":true,"showydiff":true,"showdxdyvalue":true}, {type:'circle', name: 'c', inputtype: 'centerpoint', x0: 2, y0: -4, r: 3, readonly: false}]};
-                //jQuery('.box1').emathfuncgraph({editable: false, decimalperiod: true, vertical: false, elements: [{type: 'function', name: 'f', latex: 'x+5', min: '-7', max: '3', readonly: false}, {type: 'segment', point1: 'Q', point2: 'P', showxdiff: true, showydiff: true, showdxdyvalue: true, readonly: false},{type: 'function', name: 'g', latex: 'x^3-2', readonly: false}, {type: 'point', name: 'P', xcoord: '3', ycoord: '7'}, {type: 'point', name: 'Q', xcoord: '-1', ycoord: '2', readonly: true}, {type:'circle', name: 'c', inputtype: 'centerpoint', x0: 2, y0: -4, r: 3, readonly: false},{type:'circle', name: 'c2', inputtype: 'normal', a: 2, b: 3, c: -4, readonly: false},{type:'line', name:'l_1', inputtype: 'explicit', a: 1, b: 2, c: 3, va: 5, k: 2, eb: 3, readonly: false}]});
-                //jQuery('.box1').emathfuncgraph({editable: true, authormode: true, decimalperiod: true, vertical: false, elements: []});
-                //jQuery('.box1').emathfuncgraph(data);
-                jQuery('.box1').emathfuncgraph(data2);
+                var character = {"theme":"default_theme","xscale":[-10,10],"yscale":[-10,10],"editable":true,"elements":[{"type":"circle","name":"c_{1}","x0":"0","y0":"0","r":"4","a":"0","b":"0","c":"-16","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_{2}","x0":"-4","y0":"5","r":"2.5","a":"8","b":"-10","c":"34.8","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_{3}","x0":"4","y0":"5","r":"2.5","a":"-8","b":"-10","c":"34.8","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_{4}","x0":"-1","y0":"0.5","r":"0.3","a":"2","b":"-1","c":"1.2","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_{5}","x0":"1","y0":"0.5","r":"0.3","a":"-2","b":"-1","c":"1.2","inputtype":"centerpoint","color":"black","readonly":false},{"type":"function","name":"f_{1}","latex":"\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{2}\\right)^2}-1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{2}","latex":"-\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{2}\\right)^2}-1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{3}","latex":"1.5\\sqrt{1-\\left(\\frac{3\\left(x-1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{4}","latex":"-\\sqrt{1-\\left(\\frac{3\\left(x-1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{5}","latex":"1.5\\cdot\\sqrt{1-\\left(\\frac{3\\left(x+1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{6}","latex":"-\\sqrt{1-\\left(\\frac{3\\left(x+1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{7}","latex":"\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{6}\\right)^2}-0.5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{8}","latex":"-1.8\\cdot\\sqrt{1-\\left(\\frac{x}{3}\\right)^2}-0.5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{9}","latex":"-\\sqrt{1-\\left(0.8\\cdot x\\right)^2}-2.2","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{10}","latex":"3.7\\cdot\\sqrt{1-\\left(0.6\\left(x+1\\right)\\right)^2}-0.4","color":"black","max":"0","min":"","readonly":false},{"type":"function","name":"f_{11}","latex":"3.7\\cdot\\sqrt{1-\\left(0.6\\left(x-1\\right)\\right)^2}-0.4","color":"black","max":"","min":"0","readonly":false},{"type":"function","name":"f_{12}","latex":"0.6\\sqrt{1-\\left(1.6\\left(x+3.2\\right)\\right)^2}-0.8","color":"black","max":"-2.7","min":"-4","readonly":false},{"type":"function","name":"f_{13}","latex":"0.6\\sqrt{1-\\left(1.6\\left(x-3.2\\right)\\right)^2}-0.8","color":"black","max":"4","min":"2.7","readonly":false},{"type":"function","name":"f_{14}","latex":"\\left(\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{2}\\right)^2}\\right)\\cdot\\sin\\left(50x\\right)-1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{15}","latex":"\\frac{5}{2}\\cdot\\left(\\sqrt{1-\\left(\\frac{2\\left(x-4\\right)}{5}\\right)^2}\\right)\\cdot\\sin\\left(50x\\right)+5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{16}","latex":"\\frac{5}{2}\\cdot\\left(\\sqrt{1-\\left(\\frac{2\\left(x+4\\right)}{5}\\right)^2}\\right)\\cdot\\sin\\left(50x\\right)+5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{17}","latex":"0.3\\cdot\\left(\\sqrt{1-\\left(10\\cdot\\frac{\\left(x+1\\right)}{3}\\right)^2}\\right)\\cdot\\sin\\left(40x\\right)+0.5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{18}","latex":"0.3\\cdot\\left(\\sqrt{1-\\left(10\\cdot\\frac{\\left(x-1\\right)}{3}\\right)^2}\\right)\\cdot\\sin\\left(40x\\right)+0.5","color":"black","max":"","min":"","readonly":false},
+        {
+            "type": "function",
+            "name": "f_{19}",
+            "color": "red",
+            "readonly": false,
+            "latex": "\\left(\\frac{1}{3}\\cdot\\sqrt{0.8-\\left(\\frac{3x}{2.5}\\right)^2}\\right)\\cdot\\sin\\left(50x\\right)-2.8",
+            "max": "",
+            "min": ""
+        },
+        {
+            "type": "function",
+            "name": "f_{20}",
+            "color": "red",
+            "readonly": false,
+            "latex": "\\frac{1}{3}\\cdot\\sqrt{0.8-\\left(\\frac{3x}{2.5}\\right)^2}-2.8",
+            "max": "",
+            "min": ""
+        },
+        {
+            "type": "function",
+            "name": "f_{21}",
+            "color": "red",
+            "readonly": false,
+            "latex": "-\\frac{1}{3}\\cdot\\sqrt{0.8-\\left(\\frac{3x}{2.5}\\right)^2}-2.8",
+            "max": "",
+            "min": ""
+        }
+]};
+
+                var data1 = 
+                    {
+                        "theme": "default_theme",
+                        "xscale": [
+                            -10,
+                            10
+                        ],
+                        "yscale": [
+                            -10,
+                            10
+                        ],
+                        "authormode": true,
+                        "editable": false,
+                        "listvisible": true,
+                        "elements": [
+                            {
+                                "type": "function",
+                                "name": "f_1",
+                                "color": "blue",
+                                "readonly": true,
+                                "latex": "x^3+2x^2-4x-5",
+                                "max": "",
+                                "min": ""
+                            },
+                            {
+                                "type": "function",
+                                "name": "f_2",
+                                "color": "green",
+                                "readonly": true,
+                                "latex": "x-1",
+                                "max": "8",
+                                "min": "-8"
+                            },
+                            {
+                                "type": "point",
+                                "name": "P_1",
+                                "color": "red",
+                                "readonly": false,
+                                "xcoord": "-3.1774",
+                                "ycoord": "-4.1774"
+                            },
+                            {
+                                "type": "point",
+                                "name": "P_2",
+                                "color": "red",
+                                "readonly": false,
+                                "xcoord": "-0.67836",
+                                "ycoord": "-1.67836"
+                            },
+                            {
+                                "type": "point",
+                                "name": "P_3",
+                                "color": "red",
+                                "readonly": false,
+                                "xcoord": "1.8558",
+                                "ycoord": "0.8558"
+                            }
+                        ]
+                    };
+                var data2 = {
+                    "theme": "default_theme",
+                    "decimalperiod": true,
+                    "xscale": [
+                        -10,
+                        10
+                    ],
+                    "yscale": [
+                        -10,
+                        10
+                    ],
+                    "editable": true,
+                    "listvisible": true,
+                    "elements": [
+                        {
+                            "type": "point",
+                            "name": "P_1",
+                            "color": "red",
+                            "readonly": false,
+                            "xcoord": "1",
+                            "ycoord": "1"
+                        },
+                        {
+                            "type": "point",
+                            "name": "P_2",
+                            "color": "red",
+                            "readonly": false,
+                            "xcoord": "7",
+                            "ycoord": "8"
+                        },
+                        {
+                            "type": "segment",
+                            "name": "s_1",
+                            "color": "green",
+                            "readonly": false,
+                            "point1": "P_1",
+                            "point2": "P_2",
+                            "showxdiff": true,
+                            "showydiff": true,
+                            "showdxdyvalue": true,
+                            "showlength": true
+                        },
+                        {
+                            "type": "circle",
+                            "name": "c_1",
+                            "color": "red",
+                            "readonly": false,
+                            "x0": "-5",
+                            "y0": "5",
+                            "r": "4",
+                            "a": "10",
+                            "b": "-10",
+                            "c": "34",
+                            "inputtype": "centerpoint"
+                        },
+                        {
+                            "type": "line",
+                            "name": "l_1",
+                            "color": "blue",
+                            "readonly": false,
+                            "k": "\\frac{1}{3}",
+                            "eb": "-6",
+                            "a": "0.3",
+                            "b": "-1",
+                            "c": "-6",
+                            "x0": "20",
+                            "y0": "0",
+                            "va": "20",
+                            "inputtype": "explicit"
+                        },
+                        {
+                            "type": "function",
+                            "name": "f_1",
+                            "color": "fuchsia",
+                            "readonly": false,
+                            "latex": "\\frac{1}{3}x-4+\\sin\\left(2x\\right)",
+                            "max": "8",
+                            "min": "-9"
+                        }
+                    ]
+                }
+
+                jQuery('#box0').emathfuncgraph({editable: true});
+                jQuery('#box1').emathfuncgraph(data1);
+                jQuery('#box2').emathfuncgraph(data2);
+                jQuery('#box3').emathfuncgraph(character);
             
                 jQuery('#isauthormode').attr('checked',(jQuery('.emathfuncgraph').eq(0).hasClass('emfuncgraph_authormode') ? 'checked' : ''));
                 jQuery('#iseditmode').attr('checked',(jQuery('.emathfuncgraph').eq(0).hasClass('emfuncgraph_editmode') ? 'checked' : ''));
                 jQuery('#isauthormode').change(function(){
-                    var $fg = jQuery('.emathfuncgraph').eq(0);
+                    var $fg = jQuery('#box1').eq(0);
                     var fgdata = $fg.emathfuncgraph('get');
                     fgdata.authormode = jQuery('#isauthormode').is(':checked');
                     jQuery('#databox').html(JSON.stringify(fgdata, null, 4));
                     $fg.emathfuncgraph(fgdata);
+                }).click();
+                jQuery('#box1').bind('emathfuncgraph_changed', function(){
+                    var $fg = jQuery(this);
+                    var fgdata = $fg.emathfuncgraph('get');
+                    jQuery('#databox').html(JSON.stringify(fgdata, null, 4));
                 });
             });
         </script>
@@ -44,23 +219,87 @@
         <a href="https://github.com/e-math/emathfuncgraph"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png" alt="Fork me on GitHub"></a>
         <div id="mathquillpanel"></div>
         <article class="content">
-            <h2>Example</h2>
-            <p>Example of usage of <code>emathfuncgraph.js</code>.</p>
+            <p>Examples of usage of <code>emathfuncgraph.js</code>.</p>
+            <p>A new functiongraph tool can be initated into some html-element with JavaScript code like:
+                <code>jQuery('#box').emathfuncgraph(data)</code> where the variable <code>data</code>
+                is a javascript object containing all the data of the new functiongraph. The data
+                includes the size of the canvas, modes of the tool and all drawable elements.</p>
+            <p>The data can be asked from the tool with code like: <code>jQuery('#box').emathfuncgraph('get')</code>.</p>
+            <p>Every time the content of a functiongraph is changed by the user, it triggers 'emathfuncgraph_changed'-event
+                that can be caught by the containing system. This can be used together with the 'get'-command to save
+                the data of functiongraph.</p>
+            <div id="box0"></div>
+
+            <h2>Example 1: edit, author and view</h2>
+            <p>In <strong>edit mode</strong> the new functions, points and other elements can be added and existing elements can be edited.
+            It is also possible to have some elements in read-only state. This is handy for example for exercises where
+            some part of the graph is given and the student has to fill in something.</p>
+            <p>If the functiongraph is shown in <strong>author mode</strong>, everything is editable and the author can lock elements
+            (with lock symbols) to read-only state. Author can also decide (with pencil symbol) if the functiongraph is shown in edit
+            or <strong>view mode</strong> and (with list symbol) if the element list is shown in the view mode or not.</p>
+            <p>In <strong>view mode</strong> points and circles are draggable, if they are not defined as read-only in the author mode.
+            With this one can for example create exercises in which students have to drag given points to the correct place.
+            The correctness (with reasonable error margin) can be checked from the data that can be asked from the jQuery-plugin.</p>
+            <p>The codebox below the functiongraph shows the JavaScript object that the jQuery-plugin will
+            return with <code>.emathfuncgraph('get')</code> and that can be saved as JSON-text.</p>
             <div class="codewrapper">
 <div class="codeexample">
 &lt;div class="box"&gt;
 &lt;/div&gt;
 &lt;script type="text/javascript"&gt;
-    jQuery('.box').emathfuncgraph();
+    var data = { ... see the data below the figure ...};
+    data.editable = true;
+    // data.authormode = true; // If we want authormode.
+    jQuery('#box1').emathfuncgraph(data);
 &lt;/script&gt;
 </div>
             </div>
-            <div class="box1"></div>
+            <p>Test different modes. Toggle the author mode on and off with the check box. Edit and view mode can be toggled
+            with pencil symbol in author mode.</p>
+            <div id="box1"></div>
             <p>
                 <input id="isauthormode" type="checkbox" /><label for="isauthormode">Authormode</label>
             </p>
-            <pre id="databox"></pre>
-            <!--<div class="box"></div>-->
+            <pre id="databox" class="codeexample"></pre>
+            
+            <h2>Example 2: element types and advanced options</h2>
+            <p>There are five different types of elements and some of them have advanced options that
+                can be edited by clicking three dots (...) in the element list:</p>
+            <ul>
+                <li><strong>Points</strong> take <i>x</i>- and <i>y</i>-coordinates and are draggable in normal state.
+                    If a point is in read-only state, it is shown as a square.
+                    Points don't have advanced options.</li>
+                <li><strong>Functions</strong> are defined by giving the formula.
+                    The function has the lower bound and upper bound of <i>x</i> as advanced options.</li>
+                <li><strong>A segment</strong> is defined by two points. Write in the names of the points.
+                    Segments have three checkboxes as advanced options: showing <i>&Delta;x</i> and <i>&Delta;y</i>, the numerical values
+                    of them and the distance of the endpoints of the segment</li>
+                <li><strong>A circle</strong> is defined by its equation.
+                    A circle is also draggable in normal state and can be locked to read-only state. In read-only state the centerpoint
+                    is shown as a square.
+                    From advanced options you can choose the format of the equation: centerpoint format or the normal form.</li>
+                <li><strong>A line</strong> is defined by its equation.
+                    From advanced options you can choose one of the available four formats for the equation.</li>
+            </ul>
+            <p>The usage of decimal comma instead of decimal point can be forced with property <code>decimalperiod = true</code>.</p>
+            <div class="codewrapper">
+<div class="codeexample">
+&lt;div class="box"&gt;
+&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
+    var data2 = { ... see variable data2 in the source code of this page ...};
+    data2.editable = true;
+    data2.decimalperiod = true;
+    jQuery('#box2').emathfuncgraph(data2);
+&lt;/script&gt;
+</div>
+            </div>
+            <div id="box2"></div>
+            
+            <h2>Example 3: full screen mode</h2>
+            <p>The functiongraph can be viewed in full screen mode by clicking the full screen symbol in right bottom corner.
+            This is useful for example in presentation purposes.</p>
+            <div id="box3"></div>
         </article>
         <footer>
             <div id="disclaimerbox">

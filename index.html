@@ -15,6 +15,15 @@
             jQuery(function(){
                 delete localStorage.mqpanelsettings;
                 jQuery('#mathquillpanel').mqpanel();
+                var defaultSettings = {
+            			"theme": "default_theme",
+            			"mode": "view",
+            			"listvisible": true,
+            			"presentation":false,
+            			"vertical":false,
+            			"decimalperiod":false
+            		};
+                // NOTE! the character is drawn using the legacy data JSON-format
                 var character = {"theme":"default_theme","xscale":[-10,10],"yscale":[-10,10],"editable":true,"elements":[{"type":"circle","name":"c_{1}","x0":"0","y0":"0","r":"4","a":"0","b":"0","c":"-16","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_{2}","x0":"-4","y0":"5","r":"2.5","a":"8","b":"-10","c":"34.8","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_{3}","x0":"4","y0":"5","r":"2.5","a":"-8","b":"-10","c":"34.8","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_{4}","x0":"-1","y0":"0.5","r":"0.3","a":"2","b":"-1","c":"1.2","inputtype":"centerpoint","color":"black","readonly":false},{"type":"circle","name":"c_{5}","x0":"1","y0":"0.5","r":"0.3","a":"-2","b":"-1","c":"1.2","inputtype":"centerpoint","color":"black","readonly":false},{"type":"function","name":"f_{1}","latex":"\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{2}\\right)^2}-1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{2}","latex":"-\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{2}\\right)^2}-1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{3}","latex":"1.5\\sqrt{1-\\left(\\frac{3\\left(x-1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{4}","latex":"-\\sqrt{1-\\left(\\frac{3\\left(x-1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{5}","latex":"1.5\\cdot\\sqrt{1-\\left(\\frac{3\\left(x+1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{6}","latex":"-\\sqrt{1-\\left(\\frac{3\\left(x+1\\right)}{2}\\right)^2}+1.1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{7}","latex":"\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{6}\\right)^2}-0.5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{8}","latex":"-1.8\\cdot\\sqrt{1-\\left(\\frac{x}{3}\\right)^2}-0.5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{9}","latex":"-\\sqrt{1-\\left(0.8\\cdot x\\right)^2}-2.2","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{10}","latex":"3.7\\cdot\\sqrt{1-\\left(0.6\\left(x+1\\right)\\right)^2}-0.4","color":"black","max":"0","min":"","readonly":false},{"type":"function","name":"f_{11}","latex":"3.7\\cdot\\sqrt{1-\\left(0.6\\left(x-1\\right)\\right)^2}-0.4","color":"black","max":"","min":"0","readonly":false},{"type":"function","name":"f_{12}","latex":"0.6\\sqrt{1-\\left(1.6\\left(x+3.2\\right)\\right)^2}-0.8","color":"black","max":"-2.7","min":"-4","readonly":false},{"type":"function","name":"f_{13}","latex":"0.6\\sqrt{1-\\left(1.6\\left(x-3.2\\right)\\right)^2}-0.8","color":"black","max":"4","min":"2.7","readonly":false},{"type":"function","name":"f_{14}","latex":"\\left(\\frac{1}{2}\\cdot\\sqrt{1-\\left(\\frac{3x}{2}\\right)^2}\\right)\\cdot\\sin\\left(50x\\right)-1","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{15}","latex":"\\frac{5}{2}\\cdot\\left(\\sqrt{1-\\left(\\frac{2\\left(x-4\\right)}{5}\\right)^2}\\right)\\cdot\\sin\\left(50x\\right)+5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{16}","latex":"\\frac{5}{2}\\cdot\\left(\\sqrt{1-\\left(\\frac{2\\left(x+4\\right)}{5}\\right)^2}\\right)\\cdot\\sin\\left(50x\\right)+5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{17}","latex":"0.3\\cdot\\left(\\sqrt{1-\\left(10\\cdot\\frac{\\left(x+1\\right)}{3}\\right)^2}\\right)\\cdot\\sin\\left(40x\\right)+0.5","color":"black","max":"","min":"","readonly":false},{"type":"function","name":"f_{18}","latex":"0.3\\cdot\\left(\\sqrt{1-\\left(10\\cdot\\frac{\\left(x-1\\right)}{3}\\right)^2}\\right)\\cdot\\sin\\left(40x\\right)+0.5","color":"black","max":"","min":"","readonly":false},
         {
             "type": "function",
@@ -46,160 +55,188 @@
 ]};
 
                 var data1 = 
-                    {
-                        "theme": "default_theme",
-                        "xscale": [
-                            -10,
-                            10
-                        ],
-                        "yscale": [
-                            -10,
-                            10
-                        ],
-                        "authormode": true,
-                        "editable": false,
-                        "listvisible": true,
-                        "elements": [
-                            {
-                                "type": "function",
-                                "name": "f_1",
-                                "color": "blue",
-                                "readonly": true,
-                                "latex": "x^3+2x^2-4x-5",
-                                "max": "",
-                                "min": ""
-                            },
-                            {
-                                "type": "function",
-                                "name": "f_2",
-                                "color": "green",
-                                "readonly": true,
-                                "latex": "x-1",
-                                "max": "8",
-                                "min": "-8"
-                            },
-                            {
-                                "type": "point",
-                                "name": "P_1",
-                                "color": "red",
-                                "readonly": false,
-                                "xcoord": "-3.1774",
-                                "ycoord": "-4.1774"
-                            },
-                            {
-                                "type": "point",
-                                "name": "P_2",
-                                "color": "red",
-                                "readonly": false,
-                                "xcoord": "-0.67836",
-                                "ycoord": "-1.67836"
-                            },
-                            {
-                                "type": "point",
-                                "name": "P_3",
-                                "color": "red",
-                                "readonly": false,
-                                "xcoord": "1.8558",
-                                "ycoord": "0.8558"
-                            }
-                        ]
-                    };
+                {
+                		"type": "emathfuncgraph",
+                		"settings": defaultSettings,
+                		"metadata": {
+                			"creator": "Name",
+                			"created": "2012-04-23T18:25:43.511Z",
+                			"modifier": null,
+                			"modified": null,
+                			"tags": ["tag1", "tag2"]
+                		},
+                		"data": {
+                			"xscale": [
+                				-10,
+                				10
+                			],
+                			"yscale": [
+                				-10,
+                				10
+                			],
+                			"elements": [
+                				{
+                					"type": "function",
+                					"name": "f_1",
+                					"color": "blue",
+                					"readonly": true,
+                					"latex": "x^3+2x^2-4x-5",
+                					"max": "",
+                					"min": ""
+                				},
+                				{
+                					"type": "function",
+                					"name": "f_2",
+                					"color": "green",
+                					"readonly": true,
+                					"latex": "x-1",
+                					"max": "8",
+                					"min": "-8"
+                				},
+                				{
+                					"type": "point",
+                					"name": "P_1",
+                					"color": "red",
+                					"readonly": false,
+                					"xcoord": "-3.1774",
+                					"ycoord": "-4.1774"
+                				},
+                				{
+                					"type": "point",
+                					"name": "P_2",
+                					"color": "red",
+                					"readonly": false,
+                					"xcoord": "-0.67836",
+                					"ycoord": "-1.67836"
+                				},
+                				{
+                					"type": "point",
+                					"name": "P_3",
+                					"color": "red",
+                					"readonly": false,
+                					"xcoord": "1.8558",
+                					"ycoord": "0.8558"
+                				}
+                			]
+                		}
+                	};
+                
                 var data2 = {
-                    "theme": "default_theme",
-                    "decimalperiod": true,
-                    "xscale": [
-                        -10,
-                        10
-                    ],
-                    "yscale": [
-                        -10,
-                        10
-                    ],
-                    "editable": true,
-                    "listvisible": true,
-                    "elements": [
-                        {
-                            "type": "point",
-                            "name": "P_1",
-                            "color": "red",
-                            "readonly": false,
-                            "xcoord": "1",
-                            "ycoord": "1"
-                        },
-                        {
-                            "type": "point",
-                            "name": "P_2",
-                            "color": "red",
-                            "readonly": false,
-                            "xcoord": "7",
-                            "ycoord": "8"
-                        },
-                        {
-                            "type": "segment",
-                            "name": "s_1",
-                            "color": "green",
-                            "readonly": false,
-                            "point1": "P_1",
-                            "point2": "P_2",
-                            "showxdiff": true,
-                            "showydiff": true,
-                            "showdxdyvalue": true,
-                            "showlength": true
-                        },
-                        {
-                            "type": "circle",
-                            "name": "c_1",
-                            "color": "red",
-                            "readonly": false,
-                            "x0": "-5",
-                            "y0": "5",
-                            "r": "4",
-                            "a": "10",
-                            "b": "-10",
-                            "c": "34",
-                            "inputtype": "centerpoint"
-                        },
-                        {
-                            "type": "line",
-                            "name": "l_1",
-                            "color": "blue",
-                            "readonly": false,
-                            "k": "\\frac{1}{3}",
-                            "eb": "-6",
-                            "a": "0.3",
-                            "b": "-1",
-                            "c": "-6",
-                            "x0": "20",
-                            "y0": "0",
-                            "va": "20",
-                            "inputtype": "explicit"
-                        },
-                        {
-                            "type": "function",
-                            "name": "f_1",
-                            "color": "fuchsia",
-                            "readonly": false,
-                            "latex": "\\frac{1}{3}x-4+\\sin\\left(2x\\right)",
-                            "max": "8",
-                            "min": "-9"
-                        }
-                    ]
+                		
+               		"type": "emathfuncgraph",
+               		"settings": {
+                        "theme": "default_theme",
+               			"mode": "edit",
+               			"listvisible": true,
+               			"presentation":false,
+               			"vertical":false,
+                        "decimalperiod": true,
+               		},
+            		"metadata": {
+            			"creator": "Name",
+            			"created": "2012-04-23T18:25:43.511Z",
+            			"modifier": null,
+            			"modified": null,
+            			"tags": ["tag1", "tag2"]
+            		},
+               		"data": {
+	                    "xscale": [
+	                        -10,
+	                        10
+	                    ],
+	                    "yscale": [
+	                        -10,
+	                        10
+	                    ],
+	                    "elements": [
+	                        {
+	                            "type": "point",
+	                            "name": "P_1",
+	                            "color": "red",
+	                            "readonly": false,
+	                            "xcoord": "1",
+	                            "ycoord": "1"
+	                        },
+	                        {
+	                            "type": "point",
+	                            "name": "P_2",
+	                            "color": "red",
+	                            "readonly": false,
+	                            "xcoord": "7",
+	                            "ycoord": "8"
+	                        },
+	                        {
+	                            "type": "segment",
+	                            "name": "s_1",
+	                            "color": "green",
+	                            "readonly": false,
+	                            "point1": "P_1",
+	                            "point2": "P_2",
+	                            "showxdiff": true,
+	                            "showydiff": true,
+	                            "showdxdyvalue": true,
+	                            "showlength": true
+	                        },
+	                        {
+	                            "type": "circle",
+	                            "name": "c_1",
+	                            "color": "red",
+	                            "readonly": false,
+	                            "x0": "-5",
+	                            "y0": "5",
+	                            "r": "4",
+	                            "a": "10",
+	                            "b": "-10",
+	                            "c": "34",
+	                            "inputtype": "centerpoint"
+	                        },
+	                        {
+	                            "type": "line",
+	                            "name": "l_1",
+	                            "color": "blue",
+	                            "readonly": false,
+	                            "k": "\\frac{1}{3}",
+	                            "eb": "-6",
+	                            "a": "0.3",
+	                            "b": "-1",
+	                            "c": "-6",
+	                            "x0": "20",
+	                            "y0": "0",
+	                            "va": "20",
+	                            "inputtype": "explicit"
+	                        },
+	                        {
+	                            "type": "function",
+	                            "name": "f_1",
+	                            "color": "fuchsia",
+	                            "readonly": false,
+	                            "latex": "\\frac{1}{3}x-4+\\sin\\left(2x\\right)",
+	                            "max": "8",
+	                            "min": "-9"
+	                        }
+	                    ]
+               		}
                 }
 
                 jQuery('#box0').emathfuncgraph({editable: true});
-                jQuery('#box1').emathfuncgraph(data1);
+                var box1Func = jQuery('#box1').emathfuncgraph(data1);
                 jQuery('#box2').emathfuncgraph(data2);
                 jQuery('#box3').emathfuncgraph(character);
             
-                jQuery('#isauthormode').attr('checked',(jQuery('.emathfuncgraph').eq(0).hasClass('emfuncgraph_authormode') ? 'checked' : ''));
-                jQuery('#iseditmode').attr('checked',(jQuery('.emathfuncgraph').eq(0).hasClass('emfuncgraph_editmode') ? 'checked' : ''));
+
                 jQuery('#isauthormode').change(function(){
                     var $fg = jQuery('#box1').eq(0);
                     var fgdata = $fg.emathfuncgraph('get');
-                    fgdata.authormode = jQuery('#isauthormode').is(':checked');
+                    // Settings are never stored in the data, so need to copy over
+                    var selectedMode = jQuery('#isauthormode').val();
+                    fgdata.settings = defaultSettings; // defaultSettings created when this page was loaded
+                    
+                    fgdata.settings.mode = selectedMode;
+
                     jQuery('#databox').html(JSON.stringify(fgdata, null, 4));
                     $fg.emathfuncgraph(fgdata);
-                }).click();
+                }).val('view').change();
+                
                 jQuery('#box1').bind('emathfuncgraph_changed', function(){
                     var $fg = jQuery(this);
                     var fgdata = $fg.emathfuncgraph('get');
@@ -258,8 +295,13 @@
             with pencil symbol in author mode.</p>
             <div id="box1"></div>
             <p>
-                <input id="isauthormode" type="checkbox" /><label for="isauthormode">Authormode</label>
-            </p>
+                <select id="isauthormode">
+					<option value="view">View mode</option>
+					<option value="edit">Edit mode</option>
+					<option value="author">Author mode</option>
+				</select>
+
+		</p>
             <pre id="databox" class="codeexample"></pre>
             
             <h2>Example 2: element types and advanced options</h2>
@@ -288,8 +330,8 @@
 &lt;/div&gt;
 &lt;script type="text/javascript"&gt;
     var data2 = { ... see variable data2 in the source code of this page ...};
-    data2.editable = true;
-    data2.decimalperiod = true;
+    data2.settings.mode = 'edit';
+    data2.settings.decimalperiod = true;
     jQuery('#box2').emathfuncgraph(data2);
 &lt;/script&gt;
 </div>

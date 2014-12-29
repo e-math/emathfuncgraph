@@ -26,29 +26,127 @@
             options.result = this;
             this.trigger(cmd, options);
             return options.result;
+        }else if (typeof(options) === 'object' || !options) {
+        	// Passing this 'this' to methods.init (so this there is also 'this')
+            return methods.init.apply(this, arguments);
+        } else {
+            $.error('Method ' +  options + ' does not exist on jQuery.emathtable' );
+            return this;
         }
-        // Extend default settings with user given options.
-        var settings = $.extend({
-            theme: "default_theme",             // html class for other styling
-            elements: [],
-            xscale: [-10, 10],
-            yscale: [-10, 10],
-            editable: false,
-            authormode: false,
-            vertical: false,
-            listvisible: true,
-            presentation: false,
-            decimalperiod: false
-        }, options);
 
-        // Return this so that methods of jQuery element can be chained.
-        return this.each(function(){
-            // Create new Emathfuncgraph object.
-            var emfuncgraph = new Emathfuncgraph(this, settings);
-            // Init the emathfuncgraph
-            emfuncgraph.init();
-        });
     }
+    
+    var methods = {
+        'init': function(options){
+        	
+        	var useLegacyDataType = (options['metadata'] == null || options['type'] == null);
+        	
+        	var settings;
+        	
+        	if (useLegacyDataType) {
+        		
+        		// Extend default settings with user given options.
+        		settings = $.extend({
+        			theme: "default_theme",             // html class for other styling
+        			elements: [],
+        			xscale: [-10, 10],
+        			yscale: [-10, 10],
+        			editable: false,
+        			authormode: false,
+        			vertical: false,
+        			listvisible: true,
+        			presentation: false,
+        			decimalperiod: false,
+                    settings: methods.createDefaultUserSettings(), // Added to support new version
+                    metadata: methods.createEmptyMetadata() // Added to support new version
+        		}, options);
+        		
+        	} else {
+        		
+        		if (!('settings' in options)) {
+        			options.settings = methods.createDefaultUserSettings();
+        		}
+        		
+        		// options.mode may be 'view', 'edit', 'author',  or 'review' and 'slideshow' is one form of view mode too
+        		var authormode = (options.settings.mode === 'author');
+        		
+        		// Author always edits
+        		var editable = authormode || (options.settings.mode === 'edit');
+        		
+        		var theme = 'theme' in options.settings ? options.settings.theme : "default_theme";
+        		
+        		// NOTE vertical SHOULD NOT be true if presentationis true
+        		
+        		
+        		// Extend default settings with user given options.
+        		settings = {
+        			theme: theme,             // html class for other styling
+        			elements: options.data.elements,
+        			xscale: options.data.xscale,
+        			yscale: options.data.yscale,
+        			editable: editable,
+        			authormode: authormode,
+        			vertical: options.settings.vertical,
+        			listvisible: options.settings.listvisible,
+        			presentation: options.settings.presentation,
+        			decimalperiod: options.settings.decimalperiod,
+                    settings: methods.createDefaultUserSettings(),
+                    metadata: options.metadata
+        		}
+    		
+        		
+        	}
+        	
+            
+            // Return this so that methods of jQuery element can be chained.
+            return this.each(function(){
+                // Create new Emathfuncgraph object.
+                var emfuncgraph = new Emathfuncgraph(this, settings, useLegacyDataType);
+                // Init the emathfuncgraph
+                emfuncgraph.init();
+            });
+        },
+        'get': function(){
+            var $place = $(this).eq(0);
+            var options = {};
+            $place.trigger('get', options);
+            return options.result;
+            //var data = $place.data('[[pageelementdata]]');
+            //return data;
+        },
+        'setdata': function(params){
+            var $place = $(this);
+            $place.trigger('setdata', [params]);
+        },
+        'createEmptyMetadata': function( ) {
+        	return {"creator" : null,
+            	"created": null,
+            	"modifier": null,
+            	"modified": null,
+            	"tags": []
+        	};
+        },
+        'createDefaultUserSettings': function( ) {
+        	return {
+        		"username" : null,
+            	"mode": "view",
+            	"lang": "fi",
+            	"theme": "default_theme"
+        	};
+        }
+    }
+    
+    $.fn.funcgraphelement = function(method){
+        if (methods[method]) {
+            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        } else if (typeof(method) === 'object' || !method) {
+            return methods.init.apply(this, arguments);
+        } else {
+            $.error('Method ' + method + ' does not exist in funcgraphelement.');
+            return false;
+        }
+    }
+    
     
     var Emathfuncgraph = function(place, settings){
         // Constructor for Emathfuncgraph object.
@@ -66,6 +164,8 @@
         this.decimalperiod = this.settings.decimalperiod;
         this.elements = [];
         this.elementsByName = {};
+        this.usersettings = settings.settings;
+        this.metadata = settings.metadata;
         // Add new functions and points.
         for (var i = 0; i < settings.elements.length; i++){
             if (!settings.elements[i].type){
@@ -131,14 +231,14 @@
             var hidden = $(this).is(':checked');
             emathfuncgraph.listvisible = !hidden;
             $(this).parents('li').eq(0).attr('emfg_listhidden', hidden);
-            emathfuncgraph.changed();
+            emathfuncgraph.changed(true);
         });
         this.place.find('input#emfg_editcheck_'+this.emfgareanumber).change(function(){
             // Toggle editability of funcgraph.
             var editable = $(this).is(':checked');
             emathfuncgraph.editable = editable;
             $(this).parents('li').eq(0).attr('emfg_iseditable', editable);
-            emathfuncgraph.changed();
+            emathfuncgraph.changed(true);
         });
         this.draw();
         return this;
@@ -293,7 +393,7 @@
         var newelem = new Emfgfunction(options);
         this.elements.push(newelem);
         this.elementsByName[newelem.name] = newelem;
-        this.changed();
+        this.changed(true);
     }
     
     Emathfuncgraph.prototype.addPoint = function(options){
@@ -315,7 +415,7 @@
         var newelem = new Emfgpoint(options);
         this.elements.push(newelem);
         this.elementsByName[newelem.name] = newelem;
-        this.changed();
+        this.changed(true);
     }
     
     Emathfuncgraph.prototype.addSegment = function(options){
@@ -331,7 +431,7 @@
         var newelem = new Emfgsegment(options);
         this.elements.push(newelem);
         this.elementsByName[newelem.name] = newelem;
-        this.changed();
+        this.changed(true);
     }
     
     Emathfuncgraph.prototype.addCircle = function(options){
@@ -356,7 +456,7 @@
         var newelem = new Emfgcircle(options);
         this.elements.push(newelem);
         this.elementsByName[newelem.name] = newelem;
-        this.changed();
+        this.changed(true);
     }
     
     Emathfuncgraph.prototype.addLine = function(options){
@@ -384,7 +484,7 @@
         var newelem = new Emfgline(options);
         this.elements.push(newelem);
         this.elementsByName[newelem.name] = newelem;
-        this.changed();
+        this.changed(true);
     }
     
     Emathfuncgraph.prototype.removeElement = function(index){
@@ -393,7 +493,7 @@
         this.elements.splice(index, 1);
         this.addarea.find('li.emfg_element').eq(index).remove();
         this.drawElements();
-        this.changed();
+        this.changed(true);
     }
     
     Emathfuncgraph.prototype.isEditable = function(){
@@ -401,7 +501,24 @@
         return this.editable || this.authormode;
     }
     
+    
+    
+    /**
+     * Return data the (the old format)
+     */
     Emathfuncgraph.prototype.getData = function(options){
+    	if (this.useLegacyDataType) {
+    		return this.getDataAsLegacyFormat(options);
+    	} else {
+    		return this.getDataAsNewFormat(options);    		
+    	}
+    }
+    
+    /**
+     * Return data the (the old format)
+     */
+
+    Emathfuncgraph.prototype.getDataAsLegacyFormat = function(options){
         // Get all data as an object.
         result = {
             theme: this.theme,
@@ -417,6 +534,28 @@
         options.result = result;
         return result;
     }
+    
+    
+    Emathfuncgraph.prototype.getDataAsNewFormat = function(options){
+        var result = {
+        		type: "emathfuncgraph", 
+        		metadata: this.metadata, 
+        		data: {
+        			xscale: this.xscale,
+                    yscale: this.yscale,
+                    elements: []
+               }
+        };
+        
+        for (var i = 0; i < this.elements.length; i++){
+            result.data.elements.push(this.elements[i].getData());
+        }
+        options.result = result;
+        return result;
+
+    }
+    
+    
     
     Emathfuncgraph.prototype.getAnswer = function(options){
         // Get data of all non-readonly objects.
@@ -485,7 +624,7 @@
             emfuncgraph.setColor(elemnum, color);
             $lielem.find('a.emfg_elemtools_color[color]').attr('color', color).removeClass('isopen').focus();
             $(this).parents('div.colorselectwrapper').fadeOut(300, function(){$(this).remove()});
-            emfuncgraph.changed();
+            emfuncgraph.changed(true);
         }).eq(0).focus();
         return true;
     }
@@ -517,7 +656,7 @@
             changed = currelem.dragUpdate() || changed;
         }
         if (changed){
-            this.changed();
+            this.changed(true);
             this.draw();
         }
     }
@@ -534,10 +673,15 @@
         }
     }
     
-    Emathfuncgraph.prototype.changed = function(){
+
+    Emathfuncgraph.prototype.changed = function(updateMetadata){
         // Trigger a "emathfuncgraph_changed"-event so that containing page/application/whatever knows to save
         // or do whatever it needs to do.
         var e = jQuery.Event("emathfuncgraph_changed");
+        if (updateMetadata) {
+        	this.metadata.modifier = this.usersettings.username;
+        	this.metadata.modified = new Date();        	
+        }
         this.place.trigger( e ); 
     }
     
@@ -806,7 +950,7 @@
     
     Emfgelement.prototype.changed = function(){
         // Signal the change
-        this.parent.changed();
+        this.parent.changed(true);
     }
     
     Emfgelement.prototype.redrawAll = function(){
@@ -929,7 +1073,7 @@
             var data = element.getInputData();
             element.setElement(data);
             element.markErrors();
-            element.changed();
+            element.changed(false);
             element.redrawAll();
         });
         this.listitem.find('.mathquill-editable').bind('keyup.emfg', function(e){

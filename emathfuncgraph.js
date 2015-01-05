@@ -502,10 +502,7 @@
     }
     
     
-    
-    /**
-     * Return data the (the old format)
-     */
+
     Emathfuncgraph.prototype.getData = function(options){
     	if (this.useLegacyDataType) {
     		return this.getDataAsLegacyFormat(options);
@@ -951,6 +948,7 @@
     Emfgelement.prototype.changed = function(){
         // Signal the change
         this.parent.changed(true);
+        this.isDirty = false;
     }
     
     Emfgelement.prototype.redrawAll = function(){
@@ -1073,8 +1071,10 @@
             var data = element.getInputData();
             element.setElement(data);
             element.markErrors();
-            element.changed(false);
-            element.redrawAll();
+            if (element.isDirty) {
+            	element.changed();            	
+            	element.redrawAll();
+            }
         });
         this.listitem.find('.mathquill-editable').bind('keyup.emfg', function(e){
             // Enter sends focusout and blur events for mathquill boxes.
@@ -1154,6 +1154,7 @@
     var Emfgfunction = function(options){
         // Representation of a function
         this.type = 'function';
+        this.isDirty = false;
         this.name = options.name;
         this.simplename = this.name.replace(/[{}]/g, '');
         this.latex = options.latex;
@@ -1189,8 +1190,12 @@
     Emfgfunction.prototype.setFunction = function(latex){
         // Set the function from LaTeX string. Normalize the decimal separator to '.'.
         this.valid = true;
+        
         this.invalids = [];
-        this.latex = latex.replace(/,/g, '.');
+
+        latex = latex.replace(/,/g, '.');
+        this.isDirty = !(this.latex === latex);
+        this.latex = latex;
         if (this.latex){
             this.js = Emathfuncgraph.latex2js(this.latex);
         } else {
@@ -1233,6 +1238,7 @@
             minimum = '';
         }
         minimum = minimum.replace(/,/g,'.');
+        this.isDirty = this.min !== minimum;
         this.min = minimum;
         if (minimum === ''){
             return -Infinity;
@@ -1272,6 +1278,7 @@
             maximum = '';
         }
         maximum = maximum.replace(/,/g, '.');
+        this.isDirty = this.max !== maximum;
         this.max = maximum;
         if (maximum === ''){
             return Infinity;
@@ -1425,8 +1432,11 @@
             }
             if (typeof(value) === 'number'){
                 $mqelem.removeClass('emfg_error');
-                element.changed();
-                element.redrawAll();
+                if (element.isDirty) {
+                	element.changed();            	
+                	element.redrawAll();
+                }
+
             } else {
                 $mqelem.addClass('emfg_error');
             }
@@ -1440,7 +1450,7 @@
      ************************************************/
 
     var Emfgpoint = function(options){
-        // Representation of a point.
+        // Representation of a point.sipikuja 214
         this.type = 'point';
         this.name = options.name;
         this.simplename = this.name.replace(/[{}]/g, '');
@@ -1450,6 +1460,7 @@
         this.readonly = !!options.readonly;
         this.parent = options.parent;
         this.setPoint({xcoord: this.xcoordLatex, ycoord: this.ycoordLatex});
+        this.isDirty = false;
     }
     
     // Inherit prototypes from Emfgelement, override constructor with own one.
@@ -1469,8 +1480,13 @@
         // Set point's coordinates. Normalize decimal separator to '.'.
         this.valid = true;
         this.invalids = [];
-        this.xcoordLatex = (''+options.xcoord).replace(/,/g, '.');
-        this.ycoordLatex = (''+options.ycoord).replace(/,/g, '.');
+        options.xcoord = (''+options.xcoord).replace(/,/g, '.');
+        options.ycoord =  (''+options.ycoord).replace(/,/g, '.');
+        this.isDirty = !(this.xcoordLatex === options.xcoord && this.ycoordLatex === options.ycoord);
+        this.xcoordLatex = options.xcoord;
+        this.ycoordLatex = options.ycoord;
+        
+        
         try {
             this.xcoord = Emathfuncgraph.latexeval(this.xcoordLatex);
         } catch (err) {
@@ -1629,6 +1645,7 @@
         this.showydiff = options.showydiff || false;
         this.showdxdyvalue = options.showdxdyvalue || false;
         this.showlength = options.showlength || false;
+        this.isDirty = false;
     }
     
     // Inherit prototypes from Emfgelement, override constructor with own one.
@@ -1652,6 +1669,7 @@
         // Set the endpoints of segment.
         this.valid = true;
         this.invalids = [];
+        this.isDirty = (options.point1 !== this.point1 || options.point2 !== this.point2);
         this.point1 = options.point1;
         this.point2 = options.point2;
         if (this.point1 === '' || !this.parent.board.elementsByName.hasOwnProperty(this.point1)){
@@ -1932,6 +1950,7 @@
         this.valid = true;
         this.invalids = [];
         this.setCircle({x0: this.x0Latex, y0: this.y0Latex, r: this.rLatex});
+        this.isDirty = false;
     }
     
     // Inherit prototypes from Emfgelement, override constructor with own one.
@@ -1965,9 +1984,18 @@
         }, options);
         this.valid = true;
         if (options.inputtype === 'centerpoint'){
-            this.x0Latex = (''+options.x0).replace(/,/g, '.');
-            this.y0Latex = (''+options.y0).replace(/,/g, '.');
-            this.rLatex = (''+options.r).replace(/,/g, '.');
+        	      	
+        	options.x0 = (''+options.x0).replace(/,/g, '.');
+        	options.y0 = (''+options.y0).replace(/,/g, '.');
+        	options.r = (''+options.r).replace(/,/g, '.');
+        	
+        	this.isDirty = (this.x0Latex !== options.x0 ||  this.y0Latex !== options.y0 ||  this.rLatex !== options.r);
+        	
+            this.x0Latex = options.x0;
+            this.y0Latex = options.y0;
+            this.rLatex = options.r;
+
+            
             try {
                 this.x0 = Emathfuncgraph.latexeval(this.x0Latex);
             } catch (err) {
@@ -1990,9 +2018,16 @@
                 this.convertToNormal();
             }
         } else if (options.inputtype === 'normal'){
-            this.aLatex = (''+options.a).replace(/,/g, '.');
-            this.bLatex = (''+options.b).replace(/,/g, '.');
-            this.cLatex = (''+options.c).replace(/,/g, '.');
+        	
+        	options.a = (''+options.a).replace(/,/g, '.');
+        	options.b = (''+options.b).replace(/,/g, '.');
+        	options.c = (''+options.c).replace(/,/g, '.');
+        	
+        	this.isDirty = (this.aLatex !== options.a ||  this.bLatex !== options.b ||  this.cLatex !== options.c);
+        	
+            this.aLatex = options.a;
+            this.bLatex = options.b;
+            this.cLatex = options.c;
             try {
                 this.a = Emathfuncgraph.latexeval(this.aLatex);
             } catch (err) {
@@ -2270,6 +2305,7 @@
         this.readonly = !! options.readonly;
         this.valid = true;
         this.invalids = [];
+        this.isDirty = false;
         switch (this.inputtype){
             case 'explicit':
                 this.kLatex = ''+options.k || '1';
@@ -2339,9 +2375,19 @@
         this.invalids = [];
         switch (options.inputtype){
             case 'normal':
-                this.aLatex = (''+options.a).replace(/,/g, '.');
-                this.bLatex = (''+options.b).replace(/,/g, '.');
-                this.cLatex = (''+options.c).replace(/,/g, '.');
+            	
+            	
+            	options.a = (''+options.a).replace(/,/g, '.');
+            	options.b = (''+options.b).replace(/,/g, '.');
+            	options.c = (''+options.c).replace(/,/g, '.');
+            	
+            	this.isDirty = (this.aLatex !== options.a ||  this.bLatex !== options.b ||  this.cLatex !== options.c);
+            	
+                this.aLatex = options.a;
+                this.bLatex = options.b;
+                this.cLatex = options.c;
+
+       
                 try {
                     this.a = Emathfuncgraph.latexeval(this.aLatex);
                 } catch (err){
@@ -2365,8 +2411,16 @@
                 }
                 break;
             case 'explicit':
-                this.kLatex = (''+options.k).replace(/,/g, '.');
-                this.ebLatex = (''+options.eb).replace(/,/g, '.');
+ 
+            	options.k = (''+options.k).replace(/,/g, '.');
+            	options.eb = (''+options.eb).replace(/,/g, '.');
+                
+            	this.isDirty = (this.kLatex !== options.k ||  this.ebLatex !== options.eb);
+            	
+                this.kLatex = options.k;
+                this.ebLatex = options.eb;
+            	
+           
                 try {
                     this.k = Emathfuncgraph.latexeval(this.kLatex);
                 } catch (err){
@@ -2384,9 +2438,18 @@
                 }
                 break;
             case 'point':
-                this.y0Latex = (''+options.y0).replace(/,/g, '.');
-                this.kLatex = (''+options.k).replace(/,/g, '.');
-                this.x0Latex = (''+options.x0).replace(/,/g, '.');
+            	
+            	options.y0 = (''+options.y0).replace(/,/g, '.');
+            	options.k = (''+options.k).replace(/,/g, '.');
+            	options.x0 = (''+options.x0).replace(/,/g, '.');
+            	
+            	this.isDirty = (this.y0Latex !== options.y0 ||  this.kLatex !== options.k ||  this.x0Latex !== options.x0);
+            	
+                this.y0Latex = options.y0;
+                this.kLatex = options.k;
+                this.x0Latex = options.x0;
+
+             
                 try {
                     this.y0 = Emathfuncgraph.latexeval(this.y0Latex);
                 } catch (err){
@@ -2410,7 +2473,15 @@
                 }
                 break;
             case 'vertical':
-                this.vaLatex = (''+options.va).replace(/,/g, '.');
+            	
+            	
+            	options.va = (''+options.va).replace(/,/g, '.');
+            	
+            	this.isDirty = (this.vaLatex !== options.va);
+
+            	this.vaLatex = options.va;
+
+                
                 try {
                     this.va = Emathfuncgraph.latexeval(this.vaLatex);
                 } catch (err){
@@ -2630,6 +2701,7 @@
         var element = this;
         this.listitem.find('input[name="emfg_line_'+this.name+'_inputtype"]').change(function(){
             element.inputtype = $(this).val();
+            element.isDirty = true;
             switch (element.inputtype){
                 case 'explicit':
                     element.convertFromExplicit();
@@ -2644,6 +2716,7 @@
                     element.convertFromNormal();
                     break;
             }
+
             element.changed();
             element.drawEditItem();
             //element.updateFromInput();

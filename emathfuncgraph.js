@@ -27,7 +27,7 @@
             this.trigger(cmd, options);
             return options.result;
         }else if (typeof(options) === 'object' || !options) {
-        	// Passing this 'this' to methods.init (so this there is also 'this')
+                // Passing this 'this' to methods.init (so this there is also 'this')
             return methods.init.apply(this, arguments);
         } else {
             $.error('Method ' +  options + ' does not exist on jQuery.emathtable' );
@@ -36,105 +36,86 @@
 
     }
     
-    var methods = {
-        'init': function(options){
-        	
-        	var useLegacyDataType = (options['metadata'] == null || options['type'] == null);
-        	
-        	var settings;
-        	
-        	if (useLegacyDataType) {
-        		
-        		// Extend default settings with user given options.
-        		settings = $.extend({
-        			theme: "default_theme",             // html class for other styling
-        			elements: [],
-        			xscale: [-10, 10],
-        			yscale: [-10, 10],
-        			editable: false,
-        			authormode: false,
-        			vertical: false,
-        			listvisible: true,
-        			presentation: false,
-        			decimalperiod: false,
-                    settings: methods.createDefaultUserSettings(), // Added to support new version
-                    metadata: methods.createEmptyMetadata() // Added to support new version
-        		}, options);
-        		
-        	} else {
-        		
-        		if (!('settings' in options)) {
-        			options.settings = methods.createDefaultUserSettings();
-        		}
-        		
-        		// options.mode may be 'view', 'edit', 'author',  or 'review' and 'slideshow' is one form of view mode too
-        		var authormode = (options.settings.mode === 'author');
-        		
-        		// Author always edits
-        		var editable = authormode || (options.settings.mode === 'edit');
-        		
-        		var theme = 'theme' in options.settings ? options.settings.theme : "default_theme";
-        		
-        		// NOTE vertical SHOULD NOT be true if presentationis true
-        		
-        		
-        		// Extend default settings with user given options.
-        		settings = {
-        			theme: theme,             // html class for other styling
-        			elements: options.data.elements,
-        			xscale: options.data.xscale,
-        			yscale: options.data.yscale,
-        			editable: editable,
-        			authormode: authormode,
-        			vertical: options.settings.vertical,
-        			listvisible: options.settings.listvisible,
-        			presentation: options.settings.presentation,
-        			decimalperiod: options.settings.decimalperiod,
-                    settings: methods.createDefaultUserSettings(),
-                    metadata: options.metadata
-        		}
-    		
-        		
-        	}
-        	
-            
+
+        var methods = {
+                
+        'init' : function(options) {
+
+            var useLegacyDataType = !options['type'];
+
+            var settings;
+
+            options = $.extend({}, Emathfuncgraph.defaults, options);
+
+            if (useLegacyDataType) {
+
+                // Extend default settings with user given options.
+                settings = $.extend({
+                    theme : options.settings.theme, // html class for other styling
+                    elements : [],
+                    xscale : [ -10, 10 ],
+                    yscale : [ -10, 10 ],
+                    editable : false,
+                    authormode : false,
+                    vertical : false,
+                    listvisible : true,
+                    presentation : false,
+                    decimalperiod : false,
+                    settings :options.settings,
+                    metadata : options.metadata
+                // Added to support new version
+                }, options);
+
+            } else {
+
+                // options.mode may be 'view', 'edit', 'author', or 'review' and
+                // 'slideshow' is one form of view mode too
+                var authormode = (options.settings.mode === 'author');
+
+                // Author always edits
+                var editable = authormode || (options.settings.mode === 'edit');
+
+                // NOTE vertical SHOULD NOT be true if presentationis true
+
+                // Extend default settings with user given options.
+                settings = {
+                    theme :  options.settings.theme, // html class for other styling
+                    elements : options.data.elements,
+                    xscale : options.data.xscale,
+                    yscale : options.data.yscale,
+                    editable : editable,
+                    authormode : authormode,
+                    vertical : options.settings.vertical,
+                    listvisible : options.settings.listvisible,
+                    presentation : options.settings.presentation,
+                    decimalperiod : options.settings.decimalperiod,
+                    settings : options.settings,
+                    metadata : options.metadata
+                }
+
+            }
+
             // Return this so that methods of jQuery element can be chained.
-            return this.each(function(){
+            return this.each(function() {
                 // Create new Emathfuncgraph object.
-                var emfuncgraph = new Emathfuncgraph(this, settings, useLegacyDataType);
+                var emfuncgraph = new Emathfuncgraph(this, settings);
                 // Init the emathfuncgraph
                 emfuncgraph.init();
             });
         },
-        'get': function(){
+        'get' : function() {
             var $place = $(this).eq(0);
             var options = {};
             $place.trigger('get', options);
             return options.result;
-            //var data = $place.data('[[pageelementdata]]');
+            // var data = $place.data('[[pageelementdata]]');
             //return data;
         },
-        'setdata': function(params){
+        'setdata' : function(params) {
             var $place = $(this);
-            $place.trigger('setdata', [params]);
-        },
-        'createEmptyMetadata': function( ) {
-        	return {"creator" : null,
-            	"created": null,
-            	"modifier": null,
-            	"modified": null,
-            	"tags": []
-        	};
-        },
-        'createDefaultUserSettings': function( ) {
-        	return {
-        		"username" : null,
-            	"mode": "view",
-            	"lang": "fi",
-            	"theme": "default_theme"
-        	};
+            $place.trigger('setdata', [ params ]);
         }
-    }
+    } 
     
     $.fn.funcgraphelement = function(method){
         if (methods[method]) {
@@ -305,9 +286,15 @@
         // Init all events.
         var emfuncgraph = this;
 
+        // TODO: This is for the old book
         this.place.unbind('get').bind('get', function(e, options){
             // custom event for getting data with jQuery plugin.
             return emfuncgraph.getData(options);
+        });
+        
+        
+        this.place.unbind('getdata').bind('getdata', function(e, options){
+            emfuncgraph.place.data('[[elementdata]]', emfuncgraph.getData(options));
         });
         
         this.place.unbind('answer').bind('answer', function(e, options){
@@ -502,43 +489,12 @@
     }
     
     
-
     Emathfuncgraph.prototype.getData = function(options){
-    	if (this.useLegacyDataType) {
-    		return this.getDataAsLegacyFormat(options);
-    	} else {
-    		return this.getDataAsNewFormat(options);    		
-    	}
-    }
-    
-    /**
-     * Return data the (the old format)
-     */
-
-    Emathfuncgraph.prototype.getDataAsLegacyFormat = function(options){
-        // Get all data as an object.
-        result = {
-            theme: this.theme,
-            xscale: this.xscale,
-            yscale: this.yscale,
-            editable: this.editable,
-            listvisible: this.listvisible,
-            elements: []
-        }
-        for (var i = 0; i < this.elements.length; i++){
-            result.elements.push(this.elements[i].getData());
-        }
-        options.result = result;
-        return result;
-    }
-    
-    
-    Emathfuncgraph.prototype.getDataAsNewFormat = function(options){
         var result = {
-        		type: "emathfuncgraph", 
-        		metadata: this.metadata, 
-        		data: {
-        			xscale: this.xscale,
+                        type: "emathfuncgraph", 
+                        metadata: this.metadata, 
+                        data: {
+                                xscale: this.xscale,
                     yscale: this.yscale,
                     elements: []
                }
@@ -547,7 +503,9 @@
         for (var i = 0; i < this.elements.length; i++){
             result.data.elements.push(this.elements[i].getData());
         }
-        options.result = result;
+        if (options) {
+            options.result = result;
+        }
         return result;
 
     }
@@ -676,8 +634,8 @@
         // or do whatever it needs to do.
         var e = jQuery.Event("emathfuncgraph_changed");
         if (updateMetadata) {
-        	this.metadata.modifier = this.usersettings.username;
-        	this.metadata.modified = new Date();        	
+                this.metadata.modifier = this.usersettings.username;
+                this.metadata.modified = new Date();            
         }
         this.place.trigger( e ); 
     }
@@ -932,6 +890,58 @@
     }
 
     
+    /******
+     * Default settings. 
+     ******/
+    Emathfuncgraph.defaults = {
+        metadata: {
+            creator: '',
+            created: '',
+            modifier: '',
+            modified: '',
+            tags: []
+        },
+        data: {
+            "xscale": [
+                       -10,
+                       10
+               ],
+               "yscale": [
+                       -10,
+                       10
+               ],
+               "elements": []
+        },
+        settings: {
+            mode: 'view',
+            preview: false,
+            uilang: 'en',
+            theme: 'default_theme'
+        }
+    }
+
+    Emathfuncgraph.elementinfo = {
+        type : 'emathfuncgraph',
+        elementtype : 'elements',
+        jquery : 'emathfuncgraph',
+        name : 'Function graph',
+        icon : '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="20" height="20" viewBox="0 0 30 30" class="mini-icon mini-icon-equationarray"><path style="stroke: none;" d="M4 7 l3 3 l3 -3 l1 1 l-3 3 l3 3 l-1 1 l-3 -3 l-3 3 l-1 -1 l3 -3 l-3 -3z m8 2 l6 0 l0 1 l-6 0z m0 3 l6 0 l0 1 l-6 0z m8 -5 l3 3 l3 -3 l1 1 l-3 3 l3 3 l-1 1 l-3 -3 l-3 3 l-1 -1 l3 -3 l-3 -3z M7 17 a3 3 0 0 0 0 6 a3 3 0 0 0 0 -6z m0 1 a2 2 0 0 1 0 4 a2 2 0 0 1 0 -4z m5 0 l6 0 l0 1 l-6 0z m0 3 l6 0 l0 1 l-6 0z m11 -4 a3 3 0 0 0 0 6 a3 3 0 0 0 0 -6z m0 1 a2 2 0 0 1 0 4 a2 2 0 0 1 0 -4z" /></svg>',
+        description : {
+            en : 'Function graphs',
+            fi : 'Funktiopiirturit'
+        },
+        classes : [ 'math', 'content' ]
+    }
+
+    // For possible listing/registration to elementset
+    if (typeof ($.fn.elementset) === 'function') {
+        $.fn.elementset('addelementtype', Emathfuncgraph.elementinfo);
+    }
+    
+    if (typeof($.fn.elementpanel) === 'function') {
+        $.fn.elementpanel('addelementtype', Emathfuncgraph.elementinfo);
+    }
+    
     
     /************************************************
      * Emfgelement -class
@@ -1072,8 +1082,8 @@
             element.setElement(data);
             element.markErrors();
             if (element.isDirty) {
-            	element.changed();            	
-            	element.redrawAll();
+                element.changed();              
+                element.redrawAll();
             }
         });
         this.listitem.find('.mathquill-editable').bind('keyup.emfg', function(e){
@@ -1433,8 +1443,8 @@
             if (typeof(value) === 'number'){
                 $mqelem.removeClass('emfg_error');
                 if (element.isDirty) {
-                	element.changed();            	
-                	element.redrawAll();
+                        element.changed();              
+                        element.redrawAll();
                 }
 
             } else {
@@ -1984,13 +1994,13 @@
         }, options);
         this.valid = true;
         if (options.inputtype === 'centerpoint'){
-        	      	
-        	options.x0 = (''+options.x0).replace(/,/g, '.');
-        	options.y0 = (''+options.y0).replace(/,/g, '.');
-        	options.r = (''+options.r).replace(/,/g, '.');
-        	
-        	this.isDirty = (this.x0Latex !== options.x0 ||  this.y0Latex !== options.y0 ||  this.rLatex !== options.r);
-        	
+                        
+                options.x0 = (''+options.x0).replace(/,/g, '.');
+                options.y0 = (''+options.y0).replace(/,/g, '.');
+                options.r = (''+options.r).replace(/,/g, '.');
+                
+                this.isDirty = (this.x0Latex !== options.x0 ||  this.y0Latex !== options.y0 ||  this.rLatex !== options.r);
+                
             this.x0Latex = options.x0;
             this.y0Latex = options.y0;
             this.rLatex = options.r;
@@ -2018,13 +2028,13 @@
                 this.convertToNormal();
             }
         } else if (options.inputtype === 'normal'){
-        	
-        	options.a = (''+options.a).replace(/,/g, '.');
-        	options.b = (''+options.b).replace(/,/g, '.');
-        	options.c = (''+options.c).replace(/,/g, '.');
-        	
-        	this.isDirty = (this.aLatex !== options.a ||  this.bLatex !== options.b ||  this.cLatex !== options.c);
-        	
+                
+                options.a = (''+options.a).replace(/,/g, '.');
+                options.b = (''+options.b).replace(/,/g, '.');
+                options.c = (''+options.c).replace(/,/g, '.');
+                
+                this.isDirty = (this.aLatex !== options.a ||  this.bLatex !== options.b ||  this.cLatex !== options.c);
+                
             this.aLatex = options.a;
             this.bLatex = options.b;
             this.cLatex = options.c;
@@ -2375,14 +2385,14 @@
         this.invalids = [];
         switch (options.inputtype){
             case 'normal':
-            	
-            	
-            	options.a = (''+options.a).replace(/,/g, '.');
-            	options.b = (''+options.b).replace(/,/g, '.');
-            	options.c = (''+options.c).replace(/,/g, '.');
-            	
-            	this.isDirty = (this.aLatex !== options.a ||  this.bLatex !== options.b ||  this.cLatex !== options.c);
-            	
+                
+                
+                options.a = (''+options.a).replace(/,/g, '.');
+                options.b = (''+options.b).replace(/,/g, '.');
+                options.c = (''+options.c).replace(/,/g, '.');
+                
+                this.isDirty = (this.aLatex !== options.a ||  this.bLatex !== options.b ||  this.cLatex !== options.c);
+                
                 this.aLatex = options.a;
                 this.bLatex = options.b;
                 this.cLatex = options.c;
@@ -2412,14 +2422,14 @@
                 break;
             case 'explicit':
  
-            	options.k = (''+options.k).replace(/,/g, '.');
-            	options.eb = (''+options.eb).replace(/,/g, '.');
+                options.k = (''+options.k).replace(/,/g, '.');
+                options.eb = (''+options.eb).replace(/,/g, '.');
                 
-            	this.isDirty = (this.kLatex !== options.k ||  this.ebLatex !== options.eb);
-            	
+                this.isDirty = (this.kLatex !== options.k ||  this.ebLatex !== options.eb);
+                
                 this.kLatex = options.k;
                 this.ebLatex = options.eb;
-            	
+                
            
                 try {
                     this.k = Emathfuncgraph.latexeval(this.kLatex);
@@ -2438,13 +2448,13 @@
                 }
                 break;
             case 'point':
-            	
-            	options.y0 = (''+options.y0).replace(/,/g, '.');
-            	options.k = (''+options.k).replace(/,/g, '.');
-            	options.x0 = (''+options.x0).replace(/,/g, '.');
-            	
-            	this.isDirty = (this.y0Latex !== options.y0 ||  this.kLatex !== options.k ||  this.x0Latex !== options.x0);
-            	
+                
+                options.y0 = (''+options.y0).replace(/,/g, '.');
+                options.k = (''+options.k).replace(/,/g, '.');
+                options.x0 = (''+options.x0).replace(/,/g, '.');
+                
+                this.isDirty = (this.y0Latex !== options.y0 ||  this.kLatex !== options.k ||  this.x0Latex !== options.x0);
+                
                 this.y0Latex = options.y0;
                 this.kLatex = options.k;
                 this.x0Latex = options.x0;
@@ -2473,13 +2483,13 @@
                 }
                 break;
             case 'vertical':
-            	
-            	
-            	options.va = (''+options.va).replace(/,/g, '.');
-            	
-            	this.isDirty = (this.vaLatex !== options.va);
+                
+                
+                options.va = (''+options.va).replace(/,/g, '.');
+                
+                this.isDirty = (this.vaLatex !== options.va);
 
-            	this.vaLatex = options.va;
+                this.vaLatex = options.va;
 
                 
                 try {

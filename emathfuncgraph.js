@@ -37,62 +37,18 @@
     }
     
 
-        var methods = {
+    var methods = {
                 
         'init' : function(options) {
 
             var useLegacyDataType = !options['type'];
 
             var settings;
-
-            options = $.extend({}, Emathfuncgraph.defaults, options);
-
+            
             if (useLegacyDataType) {
-
-                // Extend default settings with user given options.
-                settings = $.extend({
-                    theme : options.settings.theme, // html class for other styling
-                    elements : [],
-                    xscale : [ -10, 10 ],
-                    yscale : [ -10, 10 ],
-                    editable : false,
-                    authormode : false,
-                    vertical : false,
-                    listvisible : true,
-                    presentation : false,
-                    decimalperiod : false,
-                    settings :options.settings,
-                    metadata : options.metadata
-                // Added to support new version
-                }, options);
-
+                settings = convertToNew(options);
             } else {
-
-                // options.mode may be 'view', 'edit', 'author', or 'review' and
-                // 'slideshow' is one form of view mode too
-                var authormode = (options.settings.mode === 'author');
-
-                // Author always edits
-                var editable = authormode || (options.settings.mode === 'edit');
-
-                // NOTE vertical SHOULD NOT be true if presentationis true
-
-                // Extend default settings with user given options.
-                settings = {
-                    theme :  options.settings.theme, // html class for other styling
-                    elements : options.data.elements,
-                    xscale : options.data.xscale,
-                    yscale : options.data.yscale,
-                    editable : editable,
-                    authormode : authormode,
-                    vertical : options.settings.vertical,
-                    listvisible : options.settings.listvisible,
-                    presentation : options.settings.presentation,
-                    decimalperiod : options.settings.decimalperiod,
-                    settings : options.settings,
-                    metadata : options.metadata
-                }
-
+                settings = options;
             }
 
             // Return this so that methods of jQuery element can be chained.
@@ -106,8 +62,10 @@
         'get' : function() {
             var $place = $(this).eq(0);
             var options = {};
-            $place.trigger('get', options);
-            return options.result;
+            //$place.trigger('get', options);
+            //return options.result;
+            $place.trigger('getdata');
+            return $place.data('[[elementdata]]');
             // var data = $place.data('[[pageelementdata]]');
             //return data;
         },
@@ -115,7 +73,27 @@
             var $place = $(this);
             $place.trigger('setdata', [ params ]);
         }
-    } 
+    }
+    
+    var convertToNew = function(options){
+        var params = $.extend(true, {}, Emathfuncgraph.defaults);
+        params.settings.theme = options.theme;
+        params.settings.mode = (options.authormode ? 'author' : (options.editable ? 'edit' : 'view'));
+        params.settings.decimalperiod = options.decimalperiod;
+        params.settings.vertical = options.vertical;
+        params.data.xscale = options.xscale;
+        params.data.yscale = options.yscale;
+        params.data.listvisible = (options.listvisible === false ? false : true);
+        params.data.elements = [];
+        if (options.elements) {
+            for (var i = 0; i < options.elements.length; i++){
+                params.data.elements.push(options.elements[i]);
+            }
+        }
+        // Make a copy of params to avoid references!
+        params = JSON.parse(JSON.stringify(params));
+        return params;
+    }
     
     $.fn.funcgraphelement = function(method){
         if (methods[method]) {
@@ -131,42 +109,43 @@
     
     var Emathfuncgraph = function(place, settings){
         // Constructor for Emathfuncgraph object.
-        this.settings = settings;
+        this.settings = $.extend(true, {}, Emathfuncgraph.defaults, settings);
         this.place = $(place);
         this.place.addClass('emathfuncgraph');
-        this.theme = this.settings.theme;
-        this.xscale = this.settings.xscale;
-        this.yscale = this.settings.yscale;
-        this.editable = this.settings.editable;
-        this.authormode = this.settings.authormode;
-        this.vertical = this.settings.vertical;
-        this.presentation = this.settings.presentation;
-        this.listvisible = this.settings.listvisible;
-        this.decimalperiod = this.settings.decimalperiod;
+        this.theme = this.settings.settings.theme;
+        this.xscale = this.settings.data.xscale;
+        this.yscale = this.settings.data.yscale;
+        this.editable = this.settings.settings.mode === 'edit' || this.settings.settings.mode === 'author';
+        this.authormode = this.settings.settings.mode === 'author';
+        this.vertical = this.settings.settings.vertical;
+        this.presentation = this.settings.settings.presentation;
+        this.listvisible = this.settings.data.listvisible;
+        this.decimalperiod = this.settings.settings.decimalperiod;
         this.elements = [];
         this.elementsByName = {};
-        this.usersettings = settings.settings;
-        this.metadata = settings.metadata;
+        this.usersettings = this.settings.settings;
+        this.metadata = this.settings.metadata;
         // Add new functions and points.
-        for (var i = 0; i < settings.elements.length; i++){
-            if (!settings.elements[i].type){
+        var data = this.settings.data;
+        for (var i = 0; i < data.elements.length; i++){
+            if (!data.elements[i].type){
                 continue;
             }
-            switch (settings.elements[i].type){
+            switch (data.elements[i].type){
                 case 'function':
-                    this.addFunction(settings.elements[i]);
+                    this.addFunction(data.elements[i], true);
                     break;
                 case 'point':
-                    this.addPoint(settings.elements[i]);
+                    this.addPoint(data.elements[i], true);
                     break;
                 case 'segment':
-                    this.addSegment(settings.elements[i]);
+                    this.addSegment(data.elements[i], true);
                     break;
                 case 'circle':
-                    this.addCircle(settings.elements[i]);
+                    this.addCircle(data.elements[i], true);
                     break;
                 case 'line':
-                    this.addLine(settings.elements[i]);
+                    this.addLine(data.elements[i], true);
                     break;
                 default:
                     break;
@@ -364,7 +343,7 @@
 
     }
 
-    Emathfuncgraph.prototype.addFunction = function(options){
+    Emathfuncgraph.prototype.addFunction = function(options, unchanged){
         // Add new function element
         var elemnum = 1;
         if (typeof(options.name) === 'undefined' || options.name === ''){
@@ -380,10 +359,12 @@
         var newelem = new Emfgfunction(options);
         this.elements.push(newelem);
         this.elementsByName[newelem.name] = newelem;
-        this.changed(true);
+        if (!unchanged) {
+            this.changed(true);
+        }
     }
     
-    Emathfuncgraph.prototype.addPoint = function(options){
+    Emathfuncgraph.prototype.addPoint = function(options, unchanged){
         // Add new point element
         var elemnum = 1;
         if (typeof(options.name) === 'undefined' || options.name === ''){
@@ -402,10 +383,12 @@
         var newelem = new Emfgpoint(options);
         this.elements.push(newelem);
         this.elementsByName[newelem.name] = newelem;
-        this.changed(true);
+        if (!unchanged) {
+            this.changed(true);
+        }
     }
     
-    Emathfuncgraph.prototype.addSegment = function(options){
+    Emathfuncgraph.prototype.addSegment = function(options, unchanged){
         // Add new segment between two points
         var elemnum = 1;
         if (typeof(options.name) === 'undefined' || options.name === ''){
@@ -418,10 +401,12 @@
         var newelem = new Emfgsegment(options);
         this.elements.push(newelem);
         this.elementsByName[newelem.name] = newelem;
-        this.changed(true);
+        if (!unchanged) {
+            this.changed(true);
+        }
     }
     
-    Emathfuncgraph.prototype.addCircle = function(options){
+    Emathfuncgraph.prototype.addCircle = function(options, unchanged){
         // Add new circle element
         var elemnum = 1;
         if (typeof(options.name) === 'undefined' || options.name === ''){
@@ -443,10 +428,12 @@
         var newelem = new Emfgcircle(options);
         this.elements.push(newelem);
         this.elementsByName[newelem.name] = newelem;
-        this.changed(true);
+        if (!unchanged) {
+            this.changed(true);
+        }
     }
     
-    Emathfuncgraph.prototype.addLine = function(options){
+    Emathfuncgraph.prototype.addLine = function(options, unchanged){
         // Add new line element
         var elemnum = 1;
         if (typeof(options.name) === 'undefined' || options.name === ''){
@@ -471,7 +458,9 @@
         var newelem = new Emfgline(options);
         this.elements.push(newelem);
         this.elementsByName[newelem.name] = newelem;
-        this.changed(true);
+        if (!unchanged) {
+            this.changed(true);
+        }
     }
     
     Emathfuncgraph.prototype.removeElement = function(index){
@@ -491,13 +480,14 @@
     
     Emathfuncgraph.prototype.getData = function(options){
         var result = {
-                        type: "emathfuncgraph", 
-                        metadata: this.metadata, 
-                        data: {
-                                xscale: this.xscale,
-                    yscale: this.yscale,
-                    elements: []
-               }
+            type: "emathfuncgraph", 
+            metadata: this.metadata, 
+            data: {
+                xscale: this.xscale,
+                yscale: this.yscale,
+                elements: [],
+                listvisible: this.listvisible
+            }
         };
         
         for (var i = 0; i < this.elements.length; i++){
@@ -630,14 +620,14 @@
     
 
     Emathfuncgraph.prototype.changed = function(updateMetadata){
-        // Trigger a "emathfuncgraph_changed"-event so that containing page/application/whatever knows to save
+        // Trigger a "element_changed"-event so that containing page/application/whatever knows to save
         // or do whatever it needs to do.
-        var e = jQuery.Event("emathfuncgraph_changed");
+        //var e = jQuery.Event("element_changed");
         if (updateMetadata) {
                 this.metadata.modifier = this.usersettings.username;
-                this.metadata.modified = new Date();            
+                this.metadata.modified = new Date();
         }
-        this.place.trigger( e ); 
+        this.place.trigger( 'element_changed' , {type: 'emathfuncgraph'}); 
     }
     
     Emathfuncgraph.latex2js = function(expression, needjs){
@@ -894,6 +884,7 @@
      * Default settings. 
      ******/
     Emathfuncgraph.defaults = {
+        type: 'emathfuncgraph',
         metadata: {
             creator: '',
             created: '',
@@ -903,20 +894,24 @@
         },
         data: {
             "xscale": [
-                       -10,
-                       10
-               ],
-               "yscale": [
-                       -10,
-                       10
-               ],
-               "elements": []
+                -10,
+                10
+            ],
+            "yscale": [
+                 -10,
+                 10
+            ],
+            "elements": [],
+            listvisible: true
         },
         settings: {
             mode: 'view',
             preview: false,
             uilang: 'en',
-            theme: 'default_theme'
+            theme: 'default_theme',
+            decimalperiod: false,
+            vertical: false,
+            presentation: false
         }
     }
 
@@ -925,7 +920,7 @@
         elementtype : 'elements',
         jquery : 'emathfuncgraph',
         name : 'Function graph',
-        icon : '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="20" height="20" viewBox="0 0 30 30" class="mini-icon mini-icon-equationarray"><path style="stroke: none;" d="M4 7 l3 3 l3 -3 l1 1 l-3 3 l3 3 l-1 1 l-3 -3 l-3 3 l-1 -1 l3 -3 l-3 -3z m8 2 l6 0 l0 1 l-6 0z m0 3 l6 0 l0 1 l-6 0z m8 -5 l3 3 l3 -3 l1 1 l-3 3 l3 3 l-1 1 l-3 -3 l-3 3 l-1 -1 l3 -3 l-3 -3z M7 17 a3 3 0 0 0 0 6 a3 3 0 0 0 0 -6z m0 1 a2 2 0 0 1 0 4 a2 2 0 0 1 0 -4z m5 0 l6 0 l0 1 l-6 0z m0 3 l6 0 l0 1 l-6 0z m11 -4 a3 3 0 0 0 0 6 a3 3 0 0 0 0 -6z m0 1 a2 2 0 0 1 0 4 a2 2 0 0 1 0 -4z" /></svg>',
+        icon : '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="20" height="20" viewBox="0 0 30 30" class="mini-icon mini-icon-functiongraph"><path style="stroke: none;" d="M1 17 l26 0 l0 -2 l3 2.5 l-3 2.5 l0 -2 l-26 0z M13 29 l0 -26 l-2 0 l2.5 -3 l2.5 3 l-2 0 l0 26z M1 29 q5 -28 14 -17 q7 7 12 -10 l1 0 q-5 19 -14 10 q-8 -8 -12 17z" /></svg>',
         description : {
             en : 'Function graphs',
             fi : 'Funktiopiirturit'
@@ -2905,7 +2900,7 @@ if (typeof(config) !== 'undefined' && typeof(config.macros) !== 'undefined'){
             settings[funcgraphid].decimalperiod = (periodcountries.indexOf(EbookPages[pageno].ebook.curriculum) !== -1);
             var fgraph = jQuery(place).find('.emathfg.emathfg_'+funcgraphid).last().emathfuncgraph(settings[funcgraphid])
             if ((iseditable || isauthor) &&  params[1] !== 'authordialog') {
-                fgraph.unbind('emathfuncgraph_changed').bind('emathfuncgraph_changed', function(e){
+                fgraph.unbind('element_changed').bind('element_changed', function(e){
                     var $emfgplace = jQuery(this);
                     var data = $emfgplace.emathfuncgraph('get');
                     var settings = DataTiddler.getData(tiddler, 'emathfuncgraph',{});

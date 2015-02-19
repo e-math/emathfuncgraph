@@ -237,7 +237,7 @@
                     $fg.emathfuncgraph(fgdata);
                 }).val('view').change();
                 
-                jQuery('#box1').bind('emathfuncgraph_changed', function(){
+                jQuery('#box1').bind('element_changed', function(){
                     var $fg = jQuery(this);
                     var fgdata = $fg.emathfuncgraph('get');
                     jQuery('#databox').html(JSON.stringify(fgdata, null, 4));

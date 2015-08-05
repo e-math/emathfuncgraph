@@ -634,6 +634,7 @@
         // Simple conversion of LaTeX formulas to Javascript math-expression with at most one variable (x).
         // Functions that can be nested, should be replaced repeatedly from innermost to the outermost.
         var latexrep = [
+            [/\\abs{([^{}]*)}/ig, 'abs($1)'],
             [/\\sqrt{([^{}]*)}/ig, 'sqrt($1)'],
             [/\\sqrt\[([0-9]+)\]{([^{}]*)}/ig, '((($2)/(abs($2)))^($1))*((((($2)/(abs($2)))^($1+1))*abs($2))^(1/$1))'],
             [/\\lg\\left\(([^\(\)]+)\\right\)/g, '((log($1))/(log(10)))'],
@@ -698,6 +699,7 @@
         expression = '' + expression;
         // Functions that can be nested, should be replaced repeatedly from innermost to the outermost.
         var latexrep = [
+            [/\\abs{([^{}]*)}/ig, 'abs($1)'],
             [/\\sqrt{([^{}]*)}/ig, 'sqrt($1)'],
             [/\\lg\\left\(([^\(\)]+)\\right\)/g, '((log($1))/(log(10)))'],
             [/\\frac{([^{}]*)}{([^{}]*)}/ig, '(($1)/($2))'],
@@ -917,7 +919,7 @@
 
     Emathfuncgraph.elementinfo = {
         type : 'emathfuncgraph',
-        elementtype : 'elements',
+        elementtype : ['elements','studentelements'],
         jquery : 'emathfuncgraph',
         name : 'Function graph',
         icon : '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="20" height="20" viewBox="0 0 30 30" class="mini-icon mini-icon-functiongraph"><path style="stroke: none;" d="M1 17 l26 0 l0 -2 l3 2.5 l-3 2.5 l0 -2 l-26 0z M13 29 l0 -26 l-2 0 l2.5 -3 l2.5 3 l-2 0 l0 26z M1 29 q5 -28 14 -17 q7 7 12 -10 l1 0 q-5 19 -14 10 q-8 -8 -12 17z" /></svg>',

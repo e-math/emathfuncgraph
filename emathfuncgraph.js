@@ -927,7 +927,9 @@
             en : 'Function graphs',
             fi : 'Funktiopiirturit'
         },
-        classes : [ 'math', 'content' ]
+        roles: ['teacher', 'student', 'author'],
+        classes : [ 'math' ],
+        weight: 10
     }
 
     // For possible listing/registration to elementset
@@ -1387,7 +1389,7 @@
             '</div>',
             '<div class="emfgitem_options emfg_function_options">',
             '<div><span class="mathquill-editable" emfg-value="min" id="emfg_function_'+this.simplename+'_min" >'+ this.getMinLatex()+'</span>',
-            ' &lt; x &lt; <span class="mathquill-editable" emfg-value="max" id="emfg_function_'+this.simplename+'_max" >'+this.getMaxLatex()+'</span></div>',
+            ' &le; x &le; <span class="mathquill-editable" emfg-value="max" id="emfg_function_'+this.simplename+'_max" >'+this.getMaxLatex()+'</span></div>',
             '</div>',
             '<a href="javascript:;" class="emfg_options_showhide">...</a>',
         ].join('\n');
@@ -2896,6 +2898,19 @@ if (typeof(config) !== 'undefined' && typeof(config.macros) !== 'undefined'){
                 var settings = {};
             }
             settings[funcgraphid] = settings[funcgraphid] || {};
+            if(typeof(settings[funcgraphid].settings) ==="undefined"){
+                settings[funcgraphid].settings={};
+            }
+            settings[funcgraphid].settings.mode=(isauthor?'author':(iseditable?'edit':'view'));
+            if(typeof(settings[funcgraphid].theme) !=="undefined"){
+                 settings[funcgraphid].settings.theme = settings[funcgraphid].theme;
+            }
+            if(typeof(settings[funcgraphid].decimalperiod) !=="undefined"){
+                 settings[funcgraphid].settings.decimalperiod = settings[funcgraphid].decimalperiod;
+            }
+            if(typeof(settings[funcgraphid].vertical) !=="undefined"){
+                 settings[funcgraphid].settings.vertical = settings[funcgraphid].vertical;
+            }
             settings[funcgraphid].editable = iseditable || (!isviewmode && settings[funcgraphid].editable);
             //settings[funcgraphid].editable = iseditable;
             settings[funcgraphid].authormode = isauthor;
